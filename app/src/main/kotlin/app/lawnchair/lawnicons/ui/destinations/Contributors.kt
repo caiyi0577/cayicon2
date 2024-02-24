@@ -1,4 +1,4 @@
-package app.lawnchair.lawnicons.ui.destination
+package app.lawnchair.lawnicons.ui.destinations
 
 import android.content.Intent
 import android.net.Uri

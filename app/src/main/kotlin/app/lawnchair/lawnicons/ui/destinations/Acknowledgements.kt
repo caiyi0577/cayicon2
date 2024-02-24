@@ -1,4 +1,4 @@
-package app.lawnchair.lawnicons.ui.destination
+package app.lawnchair.lawnicons.ui.destinations
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.WindowInsets

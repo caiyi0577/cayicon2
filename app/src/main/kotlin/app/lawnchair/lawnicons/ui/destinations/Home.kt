@@ -1,4 +1,4 @@
-package app.lawnchair.lawnicons.ui.destination
+package app.lawnchair.lawnicons.ui.destinations
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import app.lawnchair.lawnicons.ui.components.home.IconPreviewGrid
 import app.lawnchair.lawnicons.ui.components.home.LawniconsSearchBar
 import app.lawnchair.lawnicons.ui.components.home.PlaceholderSearchBar
+import app.lawnchair.lawnicons.ui.components.home.RequestIcons
 import app.lawnchair.lawnicons.ui.theme.LawniconsTheme
 import app.lawnchair.lawnicons.ui.util.PreviewLawnicons
 import app.lawnchair.lawnicons.ui.util.SampleData
@@ -27,6 +28,7 @@ fun Home(
 ) {
     val iconInfoModel by lawniconsViewModel.iconInfoModel.collectAsState()
     val searchedIconInfoModel by lawniconsViewModel.searchedIconInfoModel.collectAsState()
+    val requestedIcons by lawniconsViewModel.requestedIcons.collectAsState()
     var searchTerm by rememberSaveable { mutableStateOf(value = "") }
 
     Crossfade(
@@ -49,6 +51,12 @@ fun Home(
                     iconInfoModel = it,
                     onNavigate = onNavigate,
                     isExpandedScreen = isExpandedScreen,
+                )
+            }
+            requestedIcons?.let {
+                RequestIcons(
+                    requestedIcons = it.requestedIcons,
+                    iconCount = it.iconCount
                 )
             }
             iconInfoModel?.let {
@@ -81,7 +89,7 @@ private fun HomePreview() {
             iconCount = 3,
             iconInfo = iconInfo,
             onNavigate = {},
-            isExpandedScreen = true,
+            isExpandedScreen = false,
         )
         IconPreviewGrid(iconInfo = iconInfo, isExpandedScreen = false)
     }

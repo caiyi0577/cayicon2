@@ -1,8 +1,8 @@
-package app.lawnchair.lawnicons.ui.components
+package app.lawnchair.lawnicons.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
+import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -15,11 +15,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import app.lawnchair.lawnicons.ui.destination.About
-import app.lawnchair.lawnicons.ui.destination.Acknowledgement
-import app.lawnchair.lawnicons.ui.destination.Acknowledgements
-import app.lawnchair.lawnicons.ui.destination.Contributors
-import app.lawnchair.lawnicons.ui.destination.Home
+import app.lawnchair.lawnicons.ui.destinations.About
+import app.lawnchair.lawnicons.ui.destinations.Acknowledgement
+import app.lawnchair.lawnicons.ui.destinations.Acknowledgements
+import app.lawnchair.lawnicons.ui.destinations.Contributors
+import app.lawnchair.lawnicons.ui.destinations.Home
 import app.lawnchair.lawnicons.ui.theme.LawniconsTheme
 import app.lawnchair.lawnicons.ui.util.Destinations
 import soup.compose.material.motion.animation.materialSharedAxisXIn
