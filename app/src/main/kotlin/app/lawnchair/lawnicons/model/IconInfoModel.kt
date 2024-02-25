@@ -8,6 +8,6 @@ data class IconInfoModel(
 )
 
 data class IconInfoAppfilterModel(
-    val iconInfo: List<IconInfoAppfilter>,
+    val iconInfo: ImmutableList<IconInfoAppfilter>,
     val iconCount: Int,
 )

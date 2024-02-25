@@ -53,6 +53,7 @@ fun Home(
                     isExpandedScreen = isExpandedScreen,
                 )
             }
+            lawniconsViewModel.getRequestedIcons()
             requestedIcons?.let {
                 RequestIcons(
                     requestedIcons = it.requestedIcons,

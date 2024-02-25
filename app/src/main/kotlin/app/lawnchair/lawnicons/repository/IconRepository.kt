@@ -1,7 +1,7 @@
 package app.lawnchair.lawnicons.repository
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import app.lawnchair.lawnicons.model.IconInfo
 import app.lawnchair.lawnicons.model.IconInfoAppfilter
 import app.lawnchair.lawnicons.model.IconInfoAppfilterModel
@@ -12,8 +12,8 @@ import app.lawnchair.lawnicons.model.SearchInfo
 import app.lawnchair.lawnicons.util.getIconInfoFromAppfilter
 import app.lawnchair.lawnicons.util.getIconInfoFromMap
 import app.lawnchair.lawnicons.util.getIconInfoPackageList
-import app.lawnchair.lawnicons.util.hasContent
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,16 +21,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-inline fun <reified MLD> lazyMutableLiveData(): Lazy<MutableLiveData<MLD>> =
-    lazy { MutableLiveData<MLD>() }
-
 class IconRepository @Inject constructor(application: Application) {
 
     private var iconInfo: List<IconInfo>? = null
     private var iconInfoAppfilter: List<IconInfoAppfilter>? = null
     private var iconInfoAppfilterModel = MutableStateFlow<IconInfoAppfilterModel?>(value = null)
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private var packageList = listOf<IconInfoAppfilter>()
+    private var packageList: List<IconInfoAppfilter>? = null
 
     val requestedIconList = MutableStateFlow<IconRequestModel?>(value = null)
     val iconInfoModel = MutableStateFlow<IconInfoModel?>(value = null)
@@ -62,32 +59,42 @@ class IconRepository @Inject constructor(application: Application) {
                     )
                 }
 
-            packageList = application.getIconInfoPackageList().also {
-                packageList.sortedWith(InstalledAppsComparator())
-            }
+            packageList = application.getIconInfoPackageList()
+                .associateBy { it.name }.values
+                .sortedBy { it.name.lowercase() }
         }
     }
 
-    fun getRequestedIcons() {
-        var iconRequest: List<IconRequest>
-
-        val lawniconsData = iconInfoAppfilterModel.value?.iconInfo
-        val systemData = packageList
-
-        val temp = lawniconsData?.intersect(systemData.toSet())
-
-        if (temp != null) {
-            iconRequest = temp.map {
-                IconRequest(it.name, it.componentName, it.id)
+    suspend fun getRequestedIcons() = withContext(Dispatchers.Default) {
+        requestedIconList.value = packageList?.let {packageList ->
+            val lawniconsData = iconInfoAppfilterModel.value?.iconInfo?.map {
+                IconInfoAppfilter(
+                    it.name,
+                    it.componentName,
+                    "",
+                    -1
+                )
             }
-        } else {
-            iconRequest = listOf()
-        }
+            val systemData = packageList.map {
+                IconInfoAppfilter(
+                    it.name,
+                    it.componentName,
+                    "",
+                    -1
+                )
+            }
 
-        requestedIconList.value = IconRequestModel(
-            requestedIcons = iconRequest,
-            iconCount = iconRequest.size,
-        )
+            val temp = lawniconsData?.intersect(systemData.toSet())
+
+            val iconRequest = temp?.map {
+                IconRequest(it.name, it.componentName, it.id)
+            } ?: listOf()
+
+            IconRequestModel(
+                requestedIcons = iconRequest.toImmutableList(),
+                iconCount = iconRequest.size,
+            )
+        }
     }
 
     suspend fun search(query: String) = withContext(Dispatchers.Default) {
@@ -115,24 +122,6 @@ class IconRepository @Inject constructor(application: Application) {
                 iconCount = it.size,
                 iconInfo = filtered,
             )
-        }
-    }
-}
-
-class InstalledAppsComparator(): Comparator<IconInfoAppfilter> {
-    override fun compare(a: IconInfoAppfilter, b: IconInfoAppfilter): Int {
-        try {
-            val sa = a.name
-            val sb = b.name
-
-            if (!sa.hasContent() && !sb.hasContent()) return 0
-            if (!sa.hasContent()) return -1
-            if (!sb.hasContent()) return 1
-            return sa.compareTo(sb)
-
-        }
-        catch (e: Exception ) {
-            return 0
         }
     }
 }

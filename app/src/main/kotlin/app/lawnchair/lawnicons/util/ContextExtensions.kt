@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import app.lawnchair.lawnicons.model.IconInfoAppfilter
 import app.lawnchair.lawnicons.model.IconRequest
@@ -26,7 +27,7 @@ fun Context.getPackagesList(): List<ResolveInfo> {
 
 fun Context.getIconInfoPackageList(): List<IconInfoAppfilter> {
     val resolveInfo = getPackagesList()
-    var list: MutableList<IconInfoAppfilter> = mutableListOf()
+    val list: MutableList<IconInfoAppfilter> = mutableListOf()
 
     for (ri in resolveInfo) {
         val riPkg = ri.activityInfo.packageName
@@ -38,17 +39,17 @@ fun Context.getIconInfoPackageList(): List<IconInfoAppfilter> {
             riPkg
         }
 
-        list.add(
-            IconInfoAppfilter(
-                name = name.toString(),
-                componentName = component,
-                id = 0,
-                drawableName = ""
-            )
+        val iconInfo = IconInfoAppfilter(
+            name = name.toString(),
+            componentName = component,
+            id = 0,
+            drawableName = ""
         )
+
+        list.add(iconInfo)
     }
 
-    return list.toImmutableList()
+    return list
 }
 
 fun String?.hasContent(): Boolean = orEmpty().isNotBlank() && orEmpty().isNotEmpty()

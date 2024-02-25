@@ -1,6 +1,7 @@
 package app.lawnchair.lawnicons.util
 
 import android.content.Context
+import android.util.Log
 import app.lawnchair.lawnicons.R
 import app.lawnchair.lawnicons.model.IconInfo
 import app.lawnchair.lawnicons.model.IconInfoAppfilter
@@ -47,7 +48,7 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
     val componentInfoPrefixLength = "ComponentInfo{".length
 
     try {
-        val xmlId = R.xml.grayscale_icon_map
+        val xmlId = R.xml.appfilter
         if (xmlId != 0) {
             val parser = resources.getXml(xmlId)
             val depth = parser.depth
@@ -64,11 +65,10 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
                     val component = parser.getAttributeValue(null, "component")
                     val iconName = parser.getAttributeValue(null, "name")
                     val iconId = parser.getAttributeResourceValue(null, "drawable", 0)
-                    val iconDrawable = resources.getResourceEntryName(iconId)
 
                     var actualComponent = ""
 
-                    if (component.hasContent()) {
+                    if (component != "") {
                         val parsedComponent =
                             component.substring(componentInfoPrefixLength, component.length - 1)
 
@@ -78,8 +78,8 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
                         }
                     }
 
-                    if (iconId != 0 && actualComponent.isNotEmpty()) {
-                        iconInfo += IconInfoAppfilter(iconName, iconDrawable, actualComponent, iconId)
+                    if (actualComponent != "") {
+                        iconInfo += IconInfoAppfilter(iconName, "", actualComponent, iconId)
                     }
                 }
             }
