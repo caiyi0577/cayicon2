@@ -74,7 +74,7 @@ class IconRepository @Inject constructor(application: Application) {
                     it.componentName,
                     -1
                 )
-            }
+            } ?: listOf()
             val systemData = packageList.map {
                 IconInfoAppfilter(
                     it.name,
@@ -84,13 +84,11 @@ class IconRepository @Inject constructor(application: Application) {
                 )
             }
 
-            Log.d("LAWNICONS_DEBUG", "${lawniconsData?.size}")
+            val commonItems = lawniconsData intersect systemData.toSet()
 
-            val temp = lawniconsData?.intersect(systemData.toSet())
-
-            val iconRequest = temp?.map {
-                IconRequest(it.name, it.componentName, it.id)
-            } ?: listOf()
+            val iconRequest = commonItems.map {
+                IconRequest(it.name, it.componentName)
+            }
 
             IconRequestModel(
                 requestedIcons = iconRequest.toImmutableList(),

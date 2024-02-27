@@ -1,10 +1,15 @@
 package app.lawnchair.lawnicons.ui.destinations
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Text
-import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,10 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.lawnchair.lawnicons.R
 import app.lawnchair.lawnicons.ui.components.home.IconPreviewGrid
 import app.lawnchair.lawnicons.ui.components.home.LawniconsSearchBar
 import app.lawnchair.lawnicons.ui.components.home.PlaceholderSearchBar
@@ -25,6 +30,7 @@ import app.lawnchair.lawnicons.ui.util.PreviewLawnicons
 import app.lawnchair.lawnicons.ui.util.SampleData
 import app.lawnchair.lawnicons.viewmodel.LawniconsViewModel
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Home(
@@ -36,50 +42,66 @@ fun Home(
     val searchedIconInfoModel by lawniconsViewModel.searchedIconInfoModel.collectAsState()
     val requestedIcons by lawniconsViewModel.requestedIcons.collectAsState()
     var searchTerm by rememberSaveable { mutableStateOf(value = "") }
+    var showRequestedIcons by rememberSaveable { mutableStateOf(false) }
 
     Crossfade(
         targetState = iconInfoModel != null,
         label = "",
     ) { targetState ->
         if (targetState) {
-            searchedIconInfoModel?.let {
-                LawniconsSearchBar(
-                    query = searchTerm,
-                    isQueryEmpty = searchTerm == "",
-                    onClearAndBackClick = {
-                        searchTerm = ""
-                        lawniconsViewModel.searchIcons("")
+            searchedIconInfoModel?.let { model ->
+                Scaffold(
+                    topBar = {
+                        LawniconsSearchBar(
+                            query = searchTerm,
+                            isQueryEmpty = searchTerm == "",
+                            onClearAndBackClick = {
+                                searchTerm = ""
+                                lawniconsViewModel.searchIcons("")
+                            },
+                            onQueryChange = { newValue ->
+                                searchTerm = newValue
+                                lawniconsViewModel.searchIcons(newValue)
+                            },
+                            iconInfoModel = model,
+                            onNavigate = onNavigate,
+                            isExpandedScreen = isExpandedScreen,
+                        )
                     },
-                    onQueryChange = { newValue ->
-                        searchTerm = newValue
-                        lawniconsViewModel.searchIcons(newValue)
+                    floatingActionButton = {
+                        ExtendedFloatingActionButton(
+                            onClick = {
+                                lawniconsViewModel.getRequestedIcons().let { showRequestedIcons = true }
+                            },
+                            icon = { Icon( painterResource(R.drawable.upload), "") },
+                            text = { Text(text = "Request icons") }
+                        )
                     },
-                    iconInfoModel = it,
-                    onNavigate = onNavigate,
-                    isExpandedScreen = isExpandedScreen,
-                )
-            }
-            requestedIcons.let {
-                if (it != null) {
-                    RequestIcons(
-                        requestedIcons = it.requestedIcons,
-                        iconCount = it.iconCount
-                    )
-                } else {
-                    Button(onClick = { lawniconsViewModel.getRequestedIcons() }, modifier = Modifier.zIndex(1f).padding(top = 96.dp)) {
-                        Text(text = "Get requested icons")
+                ) {
+                    requestedIcons?.let {
+                        RequestIcons(
+                            requestedIcons = it.requestedIcons,
+                            iconCount = it.iconCount,
+                            showRequestedIcons = showRequestedIcons,
+                            onDismissRequest = { showRequestedIcons = false }
+                        )
+                    }
+                    iconInfoModel?.let {
+                        IconPreviewGrid(
+                            iconInfo = it.iconInfo,
+                            isExpandedScreen = isExpandedScreen
+                        )
                     }
                 }
             }
-            iconInfoModel?.let {
-                IconPreviewGrid(iconInfo = it.iconInfo, isExpandedScreen = isExpandedScreen)
-            }
+
         } else {
             PlaceholderSearchBar()
         }
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @PreviewLawnicons
 @Composable
@@ -88,21 +110,25 @@ private fun HomePreview() {
     val iconInfo = SampleData.iconInfoList
 
     LawniconsTheme {
-        LawniconsSearchBar(
-            query = searchTerm,
-            isQueryEmpty = searchTerm == "",
-            onClearAndBackClick = {
-                searchTerm = ""
-            },
-            onQueryChange = { newValue ->
-                searchTerm = newValue
-                // No actual searching, this is just a preview
-            },
-            iconCount = 3,
-            iconInfo = iconInfo,
-            onNavigate = {},
-            isExpandedScreen = false,
-        )
-        IconPreviewGrid(iconInfo = iconInfo, isExpandedScreen = false)
+        Scaffold(
+            topBar = {
+                LawniconsSearchBar(
+                    query = searchTerm,
+                    isQueryEmpty = searchTerm == "",
+                    onClearAndBackClick = {
+                        searchTerm = ""
+                    },
+                    onQueryChange = { newValue ->
+                        searchTerm = newValue
+                        // No actual searching, this is just a preview
+                    },
+                    iconCount = 3,
+                    iconInfo = iconInfo,
+                    onNavigate = {},
+                    isExpandedScreen = false,
+                )
+            } ) {
+            IconPreviewGrid(iconInfo = iconInfo, false)
+        }
     }
 }

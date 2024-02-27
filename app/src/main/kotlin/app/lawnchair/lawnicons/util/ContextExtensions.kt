@@ -15,7 +15,7 @@ fun Context.appIcon(): Bitmap = packageManager.getApplicationIcon(packageName).t
 
 fun Context.getPackagesList(): List<ResolveInfo> {
     val packagesList = try {
-        packageManager.queryIntentActivitiesCompat(
+        packageManager.queryIntentActivities(
             Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),
             PackageManager.GET_RESOLVED_FILTER
         )
@@ -51,5 +51,3 @@ fun Context.getIconInfoPackageList(): List<IconInfoAppfilter> {
 
     return list
 }
-
-fun String?.hasContent(): Boolean = orEmpty().isNotBlank() && orEmpty().isNotEmpty()

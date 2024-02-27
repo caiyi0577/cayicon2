@@ -5,7 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 data class IconRequest(
     val name: String,
     val component: String,
-    val id: Int,
 )
 
 data class IconRequestModel(
