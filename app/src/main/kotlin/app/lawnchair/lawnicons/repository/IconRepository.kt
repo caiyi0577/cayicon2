@@ -70,19 +70,21 @@ class IconRepository @Inject constructor(application: Application) {
             val lawniconsData = iconInfoAppfilterModel.value?.iconInfo?.map {
                 IconInfoAppfilter(
                     it.name,
-                    it.componentName,
                     "",
+                    it.componentName,
                     -1
                 )
             }
             val systemData = packageList.map {
                 IconInfoAppfilter(
                     it.name,
-                    it.componentName,
                     "",
+                    it.componentName,
                     -1
                 )
             }
+
+            Log.d("LAWNICONS_DEBUG", "${lawniconsData?.size}")
 
             val temp = lawniconsData?.intersect(systemData.toSet())
 

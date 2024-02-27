@@ -2,6 +2,9 @@ package app.lawnchair.lawnicons.ui.destinations
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -9,6 +12,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.lawnchair.lawnicons.ui.components.home.IconPreviewGrid
 import app.lawnchair.lawnicons.ui.components.home.LawniconsSearchBar
@@ -53,12 +59,17 @@ fun Home(
                     isExpandedScreen = isExpandedScreen,
                 )
             }
-            lawniconsViewModel.getRequestedIcons()
-            requestedIcons?.let {
-                RequestIcons(
-                    requestedIcons = it.requestedIcons,
-                    iconCount = it.iconCount
-                )
+            requestedIcons.let {
+                if (it != null) {
+                    RequestIcons(
+                        requestedIcons = it.requestedIcons,
+                        iconCount = it.iconCount
+                    )
+                } else {
+                    Button(onClick = { lawniconsViewModel.getRequestedIcons() }, modifier = Modifier.zIndex(1f).padding(top = 96.dp)) {
+                        Text(text = "Get requested icons")
+                    }
+                }
             }
             iconInfoModel?.let {
                 IconPreviewGrid(iconInfo = it.iconInfo, isExpandedScreen = isExpandedScreen)

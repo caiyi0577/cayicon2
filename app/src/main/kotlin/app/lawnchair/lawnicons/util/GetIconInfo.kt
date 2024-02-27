@@ -5,6 +5,7 @@ import android.util.Log
 import app.lawnchair.lawnicons.R
 import app.lawnchair.lawnicons.model.IconInfo
 import app.lawnchair.lawnicons.model.IconInfoAppfilter
+import okhttp3.internal.toImmutableList
 import org.xmlpull.v1.XmlPullParser
 
 fun Context.getIconInfoFromMap(): List<IconInfo> {
@@ -68,19 +69,15 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
 
                     var actualComponent = ""
 
-                    if (component != "") {
-                        val parsedComponent =
-                            component.substring(componentInfoPrefixLength, component.length - 1)
+                    val parsedComponent =
+                        component.substring(componentInfoPrefixLength, component.length - 1)
 
-                        if (parsedComponent.hasContent() && !parsedComponent.startsWith("/")
-                            && !parsedComponent.endsWith("/")) {
-                            actualComponent = parsedComponent
-                        }
+                    if (parsedComponent != "" && !parsedComponent.startsWith("/")
+                        && !parsedComponent.endsWith("/")) {
+                        actualComponent = parsedComponent
                     }
 
-                    if (actualComponent != "") {
-                        iconInfo += IconInfoAppfilter(iconName, "", actualComponent, iconId)
-                    }
+                    iconInfo.add(IconInfoAppfilter(iconName, "", actualComponent, iconId))
                 }
             }
         }
@@ -88,6 +85,6 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
         e.printStackTrace()
     }
 
-    return iconInfo
+    return iconInfo.toImmutableList()
 }
 
