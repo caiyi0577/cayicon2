@@ -2,7 +2,6 @@ package app.lawnchair.lawnicons.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.lawnchair.lawnicons.model.IconRequest
 import app.lawnchair.lawnicons.repository.IconRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,7 +14,6 @@ class LawniconsViewModel @Inject constructor(private val iconRepository: IconRep
     val iconInfoModel = iconRepository.iconInfoModel
     val searchedIconInfoModel = iconRepository.searchedIconInfoModel
     val requestedIcons = iconRepository.requestedIconList
-
     fun searchIcons(query: String) {
         viewModelScope.launch {
             iconRepository.search(query)

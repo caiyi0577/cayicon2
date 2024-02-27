@@ -1,7 +1,6 @@
 package app.lawnchair.lawnicons.util
 
 import android.content.Context
-import android.util.Log
 import app.lawnchair.lawnicons.R
 import app.lawnchair.lawnicons.model.IconInfo
 import app.lawnchair.lawnicons.model.IconInfoAppfilter
@@ -72,8 +71,9 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
                     val parsedComponent =
                         component.substring(componentInfoPrefixLength, component.length - 1)
 
-                    if (parsedComponent != "" && !parsedComponent.startsWith("/")
-                        && !parsedComponent.endsWith("/")) {
+                    if (parsedComponent != "" && !parsedComponent.startsWith("/") &&
+                        !parsedComponent.endsWith("/")
+                    ) {
                         actualComponent = parsedComponent
                     }
 
@@ -87,4 +87,3 @@ fun Context.getIconInfoFromAppfilter(): List<IconInfoAppfilter> {
 
     return iconInfo.toImmutableList()
 }
-

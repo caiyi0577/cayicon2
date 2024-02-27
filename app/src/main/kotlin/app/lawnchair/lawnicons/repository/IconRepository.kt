@@ -1,7 +1,6 @@
 package app.lawnchair.lawnicons.repository
 
 import android.app.Application
-import android.util.Log
 import app.lawnchair.lawnicons.model.IconInfo
 import app.lawnchair.lawnicons.model.IconInfoAppfilter
 import app.lawnchair.lawnicons.model.IconInfoAppfilterModel
@@ -55,7 +54,7 @@ class IconRepository @Inject constructor(application: Application) {
                 .also {
                     iconInfoAppfilterModel.value = IconInfoAppfilterModel(
                         iconInfo = it.toPersistentList(),
-                        iconCount = it.size
+                        iconCount = it.size,
                     )
                 }
 
@@ -66,13 +65,13 @@ class IconRepository @Inject constructor(application: Application) {
     }
 
     suspend fun getRequestedIcons() = withContext(Dispatchers.Default) {
-        requestedIconList.value = packageList?.let {packageList ->
+        requestedIconList.value = packageList?.let { packageList ->
             val lawniconsData = iconInfoAppfilterModel.value?.iconInfo?.map {
                 IconInfoAppfilter(
                     it.name,
                     "",
                     it.componentName,
-                    -1
+                    -1,
                 )
             } ?: listOf()
             val systemData = packageList.map {
@@ -80,7 +79,7 @@ class IconRepository @Inject constructor(application: Application) {
                     it.name,
                     "",
                     it.componentName,
-                    -1
+                    -1,
                 )
             }
 

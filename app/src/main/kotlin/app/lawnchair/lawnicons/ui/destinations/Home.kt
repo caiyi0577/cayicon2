@@ -3,13 +3,10 @@ package app.lawnchair.lawnicons.ui.destinations
 import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Send
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Text
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.lawnchair.lawnicons.R
@@ -73,8 +69,8 @@ fun Home(
                             onClick = {
                                 lawniconsViewModel.getRequestedIcons().let { showRequestedIcons = true }
                             },
-                            icon = { Icon( painterResource(R.drawable.upload), "") },
-                            text = { Text(text = "Request icons") }
+                            icon = { Icon(painterResource(R.drawable.upload), "") },
+                            text = { Text(text = "Request icons") },
                         )
                     },
                 ) {
@@ -83,18 +79,17 @@ fun Home(
                             requestedIcons = it.requestedIcons,
                             iconCount = it.iconCount,
                             showRequestedIcons = showRequestedIcons,
-                            onDismissRequest = { showRequestedIcons = false }
+                            onDismissRequest = { showRequestedIcons = false },
                         )
                     }
                     iconInfoModel?.let {
                         IconPreviewGrid(
                             iconInfo = it.iconInfo,
-                            isExpandedScreen = isExpandedScreen
+                            isExpandedScreen = isExpandedScreen,
                         )
                     }
                 }
             }
-
         } else {
             PlaceholderSearchBar()
         }
@@ -127,7 +122,8 @@ private fun HomePreview() {
                     onNavigate = {},
                     isExpandedScreen = false,
                 )
-            } ) {
+            },
+        ) {
             IconPreviewGrid(iconInfo = iconInfo, false)
         }
     }

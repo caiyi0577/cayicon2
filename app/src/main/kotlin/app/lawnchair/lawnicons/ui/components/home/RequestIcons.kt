@@ -20,11 +20,13 @@ import app.lawnchair.lawnicons.model.IconRequest
 import app.lawnchair.lawnicons.ui.components.core.SimpleListRow
 import app.lawnchair.lawnicons.ui.theme.LawniconsTheme
 import app.lawnchair.lawnicons.ui.util.PreviewLawnicons
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestIcons(
-    requestedIcons: List<IconRequest>,
+    requestedIcons: ImmutableList<IconRequest>,
     iconCount: Int,
     showRequestedIcons: Boolean = false,
     onDismissRequest: () -> Unit,
@@ -47,18 +49,18 @@ private fun BottomSheet(
     iconCount: Int,
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    requestedIcons: List<IconRequest>
+    requestedIcons: ImmutableList<IconRequest>,
 ) {
     val requests = requestedIcons.joinToString("%0A") { it.component }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        sheetState = sheetState
+        sheetState = sheetState,
     ) {
         LazyColumn {
             stickyHeader {
-                Surface (
-                    modifier = Modifier.fillMaxWidth()
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column {
                         UnthemedIconsInfo(iconCount = iconCount, request = buildForm(requests))
@@ -97,16 +99,16 @@ private fun RequestIconsPreview() {
             requestedIcons = listOf(
                 IconRequest(
                     name = "Example",
-                    component = "example.component/example.activity"
+                    component = "example.component/example.activity",
                 ),
                 IconRequest(
                     name = "Example 2",
-                    component = "example.componenttwo/example.activity"
-                )
-            ),
+                    component = "example.componenttwo/example.activity",
+                ),
+            ).toImmutableList(),
             iconCount = 2,
             showRequestedIcons = true,
-            onDismissRequest = {}
+            onDismissRequest = {},
         )
     }
 }

@@ -13,7 +13,7 @@ import app.lawnchair.lawnicons.ui.components.core.SimpleListRow
 @Composable
 fun UnthemedIconsInfo(
     iconCount: Int,
-    request: String
+    request: String,
 ) {
     val context = LocalContext.current
     Card(
@@ -23,12 +23,12 @@ fun UnthemedIconsInfo(
             context.startActivity(intent)
         },
         modifier = Modifier.padding(
-            horizontal = 16.dp
-        )
+            horizontal = 16.dp,
+        ),
     ) {
         SimpleListRow(
             label = "You have $iconCount apps with no icons",
-            description = "Tap to request all unthemed icons"
+            description = "Tap to request all unthemed icons",
         )
     }
 }
