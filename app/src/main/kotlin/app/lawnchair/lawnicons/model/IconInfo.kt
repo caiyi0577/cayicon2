@@ -6,3 +6,10 @@ data class IconInfo(
     val packageName: String,
     val id: Int,
 )
+
+data class IconInfoAppfilter(
+    val name: String,
+    val drawableName: String,
+    val componentName: String,
+    val id: Int,
+)
