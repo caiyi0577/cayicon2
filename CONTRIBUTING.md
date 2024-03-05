@@ -11,7 +11,7 @@ For additional information on designing icons and samples, see [the Lawnicons Fi
 Need help? [Join Lawnchair on Discord](https://discord.com/invite/3x8qNWxgGZ).
 
 ### TL;DR
-The canvas is `192×192px`. The content area for most icons are `160×160px`, but `154×154px` for the squares. No fill, the stroke width is `12px`. All shapes should be black `#000` with rounded ends and joins. Round 90° angles by `6-32px`. Maintain visual balance. Simplify details, but don't lose recognizability. Provide original and localized names, so the icons can be found.
+The canvas is `192×192px`. The content area for most icons is `160×160px`, meaning the long side of an icon should be `160px`. Square icons should be `154×154px`. No fill, the stroke width is `12px`. All shapes should be black `#000` with rounded ends and joins. Round 90° angles by `6-32px`. Maintain visual balance. Simplify details, but don't lose recognizability. Provide original and localized names, so the icons can be found.
 
 ### Canvas & Sizes
 
@@ -159,12 +159,11 @@ Please check the [icon tool guide](/docs/icontool_guide.md) for more information
 
 ### Using 3rd-party apps
 #### IconRequest app
-[Video guide](https://kappa.lol/FL_Oh) • 11.6 MB, 25s
 
 1. Download the [IconRequest app](https://github.com/Kaiserdragon2/IconRequest/releases).
 2. Launch the app and click one of the options:
-- UPDATE EXISTING — to copy packages with activities.
-- REQUEST NEW — to save icon images and packages with activities.
+- UPDATE EXISTING — to copy packages with activities. [How to request icons](https://kappa.lol/FL_Oh), 25s video.
+- REQUEST NEW — to save icon images and packages with activities. This option is better if you are creating icons.
 3. Select the apps for which youʼd like to request or make icons.
 4. Copy, save or share.
 
